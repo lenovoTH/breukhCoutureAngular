@@ -1,0 +1,74 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-success">
+            <h4 class="card-title text-white text-center fw-bold">BREUKH-COUTURE</h4>
+        </div>
+        <div class="w-75 mx-auto">
+            <div class="card-body">
+                <h5 class="text-center text-primary fw-bold">CATEGORIES</h5>
+            </div>
+            <div class="row mt-3">
+
+                <form [formGroup]="myForm" (ngSubmit)="ajoutOuModif()" class="col-md-6 mb-4" action="">
+                    <div>
+                        <label for="" class="text-primary me-3 ms-3 fw-bold">LIBELLE</label>
+                        <input type="text" required class="form-control" formControlName="libelle" #myLibelle
+                            (input)="find(myLibelle)">
+                        <div class="notif"></div>
+                        <button type="submit" class="btn btn-success mt-4 ms-3" [disabled]="btnok">OK</button>
+                    </div>
+                </form>
+
+                <div class="col-md-6">
+                    <div class="row mt-4">
+                        <label for="" class="fw-bold d-inline col-3">Ajout</label>
+                        <div class="form-check form-switch col-3">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                                [checked]="btnswitch" value="ajout" (change)="testswitch($event)" />
+                        </div>
+                        <label class="fw-bold d-inline col-3">Edit</label>
+                    </div>
+                </div>
+
+            </div>
+            <hr>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <h3 class="text-center text-primary fw-bold">Liste des categories</h3>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-success mt-4 ms-3" (click)="suppression(tabCheckbox,$event)"
+                        [disabled]="btnSupp">supprimer</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col fw-bold"><input type="checkbox" value="" [checked]="checkbox"
+                                    (click)="allCheck($event)"></th>
+                            <th scope="col fw-bold">Libelle</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let liste of donnees
+                    
+                    | paginate :{
+                        itemsPerPage: 5,
+                        currentPage: pagination,
+                        totalItems: allPages
+                    }
+                    ">
+                        <tr>
+                            <th scope="row"><input type="checkbox" value="{{liste.id}}" [checked]="checkbox" #valcheck
+                                    class="toutcheck" (click)="recupCheck(valcheck)"></th>
+
+                            <input type="text" id="form7Example1" class="form-control" readonly name="inputListe"
+                                #valInput value="{{liste.libelle}}" (click)="recup(valInput, valcheck, myLibelle)"
+                                [checked]="onecheck" />
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination-controls (pageChange)="changerPage($event)">
+                </pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
