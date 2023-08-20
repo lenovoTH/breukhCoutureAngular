@@ -1,81 +1,83 @@
-<div class="row mt-3 mx-3" style="margin-top:25px ;">
-    <div class="col-md-3">
-        <div style="margin-top: 50px; margin-left: 10px;" class="text-center">
-            <div class="card  rounded-9">
-                <div class="card-body">
-                    <label for="">Photo</label>
+<form action="" [formGroup]="myForm" (ngSubmit)="submitForm()">
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label class="form-label" for="form9Example1">Libelle</label>
+                <input type="text" id="form9Example1" class="form-control input-custom" #lib (input)="reference(lib)"
+                    formControlName="libelle" />
+            </div>
 
-                    <label role="button" class="control-label" for="logo">
-                <img [src]="imageShow" class="avatar-xl img-thumbnail border-primary border-3" ><br/>
-                </label>
-                    <input class="form-control" type="file" name="logo" id="logo" hidden="hidden" (change)="onFileChange($event)" />
+            <div class="form-group">
+                <label class="form-label" for="form9Example2">Prix</label>
+                <input type="text" id="form9Example2" formControlName="prix" class="form-control input-custom" />
+            </div>
+
+            <div class="">
+                <label class="form-label" for="form9Example3">Catégorie</label>
+                <select class="form-control" formControlName="categorie" (change)="selectCategorie($event)">
+                    <option value="" disabled>choisir</option>
+                    <option [value]="categorie.id" *ngFor="let categorie of categories">
+                        {{categorie.libelle}}</option>
+                </select>
+            </div>
+
+            <div class="">
+                <label class="form-label" for="form9Example4">Stock</label>
+                <input type="text" id="form9Example4" class="form-control input-custom" formControlName="stock" />
+            </div>
+
+            <div>
+                <label class="form-label" for="form9Example6">Fournisseurs</label>
+                <div *ngFor="let fourn of fournSelectionner">
+                    <div class="mixer">
+                        <div class="item">
+                            {{fourn.libelle}}
+                            <i class="fa fa-close" (click)="suppfourn(fourn)"></i>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="">
+                    <input type="text" id="form9Example6" class="form-control input-custom"
+                        formControlName="fournisseur" (input)="findFournisseur($event)" />
+                </div>
+                <div class="autocomplete">
+                    <div *ngFor="let fournisseur of tabFournisseurs">
+                        <span (click)="selectFourn(fournisseur)">{{fournisseur.libelle}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="float-end ">
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-rounded mt-5"
+                    style="background-color: #0062CC ;">Enregistrer</button>
             </div>
         </div>
 
+        <div class="col">
+            <div class="col-md-3">
+                <div style="margin-top: 50px; margin-left: 10px;" class="text-center">
+                    <div class="card  rounded-9">
+                        <div class="card-body">
+                            <label for="">Photo</label>
 
-    </div>
-    <div class="col-md-9 justify-content-center">
-        <div class="card card-custom pb-4">
-            <div class="card-body mt-0 mx-5">
-                <div class="text-center mb-3 pb-2 mt-3">
-                    <h4 style="color: #495057 ;">Ajouter Article</h4>
+                            <label role="button" class="control-label" for="logo">
+                                <img [src]="image" class="avatar-xl img-thumbnail border-primary border-3"><br />
+                            </label>
+                            <input class="form-control" type="file" name="logo" id="logo" hidden="hidden"
+                                (change)="addImg($event)" />
+                        </div>
+                    </div>
                 </div>
-
-                <form class="mb-0">
-
-                    <div class="row mb-4">
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label" for="form9Example1">Libelle</label>
-                                <input type="text" id="form9Example1" class="form-control input-custom" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="">
-                                <label class="form-label" for="form9Example2">Prix</label>
-                                <input type="text" id="form9Example2" class="form-control input-custom" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col">
-                            <div class="">
-                                <label class="form-label" for="form9Example3">Catégorie</label>
-                                <select class="form-control">
-                                  <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="">
-                                <label class="form-label" for="form9Example4">Stock</label>
-                                <input type="text" id="form9Example4" class="form-control input-custom" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col">
-                            <div class="">
-                                <label class="form-label" for="form9Example6">Fournisseurs</label>
-                                <input type="text" id="form9Example6" class="form-control input-custom" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="">
-                                <label class="form-label" for="typeEmail">Référence</label>
-                                <input type="email" id="typeEmail" class="form-control input-custom" readonly />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="float-end ">
-                        <!-- Submit button -->
-                        <button type="submit" class="btn btn-primary btn-rounded" style="background-color: #0062CC ;">Enregstrer</button>
-                    </div>
-
-                </form>
+            </div>
+            <div class="col">
+                <div class="">
+                    <label class="form-label" for="typeEmail">Référence</label>
+                    <input type="text" value="{{libelle+'-'+categorie.toUpperCase()}}" id="typeEmail"
+                        class="form-control input-custom" readonly />
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+</form>

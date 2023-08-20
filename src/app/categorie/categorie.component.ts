@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CategorieService } from '../categorie.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CategorieService } from '../services/categorie.service';
+import { Categorie } from '../model/model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-categorie',
@@ -8,16 +10,18 @@ import { CategorieService } from '../categorie.service';
   styleUrls: ['./categorie.component.css']
 })
 export class CategorieComponent implements OnInit {
-  constructor(private service: CategorieService, private formBuilder: FormBuilder) { }
+  constructor(private service: CategorieService,
+    private formBuilder: FormBuilder) { }
   myForm!: FormGroup;
 
   pagination: number = 1
   allPages: number = 0
-  donnees: any = []
+  donnees: Categorie[] = []
   libelle: string = ""
-  idcheckbox: number = 1
-  tabAll: any = []
-  tabCheckbox: number[] = []
+  idcheckbox!: HTMLInputElement
+  tabAll: Categorie[] = []
+  tabCheckbox: string[] = []
+  // nonCheck: string[] = []
   inputListe: string = ""
   btnswitch: boolean = false
   btnok: boolean = true
@@ -25,10 +29,17 @@ export class CategorieComponent implements OnInit {
   checkbox: boolean = false
   switch: boolean = false
   onecheck: boolean = false
+  oneone: boolean = false
+  grcheckbox: boolean = false
+  inputLib: boolean = false
+  valswitch2: boolean = false
+  tablength!: number
+  tabrecup: any
+  itemsPerPage: number = 5
 
   ngOnInit() {
     this.myForm = this.formBuilder.group({
-      libelle: ['', [Validators.required, Validators.minLength(3)]],
+      libelle: ['', [Validators.required, Validators.minLength(3)]]// 
     });
     this.fetchCategories()
     this.toutesCategories()
@@ -37,31 +48,41 @@ export class CategorieComponent implements OnInit {
   // ---------------------------------------------------------------------------------
   // ---------------------------------------------------------------------------------
 
-
   fetchCategories() {
-    this.service.getCategories(this.pagination).subscribe({
-      next: (value: any) => {
-        this.donnees = value.data
-        // console.log(this.donnees);
-        this.allPages = value.total
-      },
-      error: (message: string) => {
-        console.log(message);
-      }
+    this.service.getCategories(this.pagination).subscribe((categorie: any) => {
+      // console.log(categorie.data);
+      this.donnees = categorie.data,
+        this.allPages = categorie.total
     })
-  }
-
-  changerPage(event: any) {
-    this.pagination = event
-    this.fetchCategories()
   }
 
   toutesCategories() {
     this.service.AllCategories().subscribe({
-      next: (value) => {
+      next: (value: any) => {
+        // console.log(value);
         this.tabAll = value
       }
     })
+  }
+
+  changerPage(event: number) {
+    this.pagination = event
+    if (this.lastPage(this.pagination, this.tabAll.length, this.itemsPerPage)) {
+      console.log(this.recupnbreEl().length);
+    }
+    this.fetchCategories()
+  }
+
+  lastPage(currentPage: number, nbreElementTotal: number, itemsPerPage: number) {
+    const total = Math.ceil(nbreElementTotal / itemsPerPage)
+    return currentPage == total
+  }
+
+  recupnbreEl() {
+    const elemsDebutpage = (this.pagination - 1) * this.itemsPerPage
+    const elemsfinpage = elemsDebutpage + this.itemsPerPage
+    return this.tabAll.slice(elemsDebutpage, elemsfinpage)
+    // return this.tabrecup.length
   }
 
   // ---------------------------------------------------------------------------------
@@ -73,7 +94,9 @@ export class CategorieComponent implements OnInit {
         this.donnees = value
         this.myForm.reset()
         this.btnok = true
+        // this.btnSupp == false
         this.fetchCategories()
+        this.toutesCategories()
       },
       error: (message: string) => {
         console.log(message);
@@ -81,16 +104,20 @@ export class CategorieComponent implements OnInit {
     })
   }
 
-  find(libelle: any) {
-    const notif = document.querySelector('.notif') as HTMLDivElement
-    if (libelle.value.length == 0) {
+  find(libelle: HTMLInputElement) {
+    // const notif = document.querySelector('.notif') as HTMLDivElement
+    if (libelle.value.length < 3) {
       this.btnok = true;
       // notif.innerHTML = "le libelle doit avoir au moins 3 caractères";
       // notif.style.color = "red"
     }
     if (libelle.value.length >= 3) {
-      this.btnok = this.tabAll.some((p: any) => p.libelle === libelle.value)
-      notif.innerHTML = "";
+      console.log(this.tabAll.some((p: Categorie) => p.libelle === libelle.value));
+      console.log(this.tabAll);
+
+      this.btnok = this.tabAll.some((p: Categorie) => p.libelle === libelle.value)
+      console.log(this.btnok);
+      // notif.innerHTML = "";
     } else if (!this.btnok) {
       this.btnok = false;
       // notif.innerHTML = "le libelle doit avoir au moins 3 caractères";
@@ -102,7 +129,7 @@ export class CategorieComponent implements OnInit {
   // ---------------------------------------------------------------------------------
 
   modifCategorie() {
-    this.service.updateCategorie(this.idcheckbox, this.myForm.value.libelle).subscribe({
+    this.service.updateCategorie(this.idcheckbox.value, this.myForm.value.libelle).subscribe({
       next: (value) => {
         // console.log(value);
         this.myForm.value.libelle = ""
@@ -111,12 +138,17 @@ export class CategorieComponent implements OnInit {
     })
   }
 
-  testswitch(event: any) {
-    if (event.target.checked) {
+  testswitch(event: HTMLInputElement) {
+    if (event.checked) {
       this.switch = true
+      this.myForm.controls['libelle'].disable()
+      this.valswitch2 = this.btnok
+      this.btnok = true
     }
     else {
       this.switch = false
+      this.myForm.controls['libelle'].enable()
+      this.btnok = this.valswitch2
     }
   }
 
@@ -129,16 +161,14 @@ export class CategorieComponent implements OnInit {
     }
   }
 
-  recup(inputListe: any, idcheckbox: any, libelle: any) {
-    // console.log(inputListe.value);
-    // console.log(idcheckbox.value);
+  recup(inputListe: HTMLInputElement, idcheckbox: HTMLInputElement, libelle: HTMLInputElement) {
     if (this.switch) {
       libelle.value = inputListe.value
-      this.idcheckbox = idcheckbox.value
+      this.idcheckbox = idcheckbox
       this.find(libelle)
+      this.myForm.controls['libelle'].enable()
     }
     else {
-      // libelle.value = ""
       this.myForm.reset()
     }
   }
@@ -146,46 +176,73 @@ export class CategorieComponent implements OnInit {
   // ---------------------------------------------------------------------------------
   // ---------------------------------------------------------------------------------
 
-  suppression(tabCheckbox: any, event:any) {
-    tabCheckbox.forEach((element: any) => {
+  suppression() {
+    this.tabCheckbox.forEach((element: string) => {
       this.service.deleteCategorie(element).subscribe({
         next: (value) => {
           console.log('supprimé avec succes');
-          this.etatCheck(event)
           this.btnSupp = true
           this.fetchCategories()
         }
       })
-    });
+    })
   }
 
-  etatCheck(event: any) {
-    event.target.onecheck = !event.target.onecheck
-  }
-
-  recupCheck(idcheckbox: any) {
-    if (!this.checkbox) {
+  recupCheck(idcheckbox: string, event: Event) {
+    const target = event.target as HTMLInputElement
+    this.grcheckbox = false
+    if (target.checked) {
       this.btnSupp = false
-      this.tabCheckbox.push(idcheckbox.value)
-    }
-    else { console.log("breukh") }
-  }
-
-  allCheck(event: any) {
-    const toutcheck = document.querySelectorAll('.toutcheck') as NodeListOf<HTMLInputElement>;
-    if (event.target.checked == true) {
-      this.tabCheckbox = []
-      toutcheck.forEach(element => {
-        element.checked = true
-        this.tabCheckbox.push(+element.value)
-      });
-      this.btnSupp = false
+      this.tabCheckbox.push(idcheckbox)
+      this.tablength = this.tabCheckbox.length
+      console.log(this.tabCheckbox);
+      if (this.tabCheckbox.length >= 5) {
+        this.grcheckbox = true
+      }
+      else {
+        this.grcheckbox = false
+      }
     }
     else {
-      this.onecheck = true
-      toutcheck.forEach(element => {
-        element.checked = false
-      });
+      this.tabCheckbox.forEach((element, i) => {
+        if (element == idcheckbox) {
+          this.tabCheckbox.splice(i, 1)
+          if (this.grcheckbox = true && this.tabCheckbox.length < 5) {
+            console.log('breuuuu');
+            // console.log(!this.grcheckbox);
+            this.grcheckbox = false
+            console.log(this.grcheckbox);
+          }
+          console.log(this.tabCheckbox);
+        }
+      })
     }
   }
+
+  allCheck(event2: Event) {
+    const event = event2.target as HTMLInputElement
+    const toutcheck = document.querySelectorAll('.toutcheck') as NodeListOf<HTMLInputElement>;
+    this.tabCheckbox = []
+    if (event.checked == true) {
+      toutcheck.forEach(element => {
+        element.checked = true
+        this.tabCheckbox.push(element.value)
+        this.tablength = this.tabCheckbox.length
+      });
+      // console.log(this.tabCheckbox);
+      if (this.switch) {
+        this.btnSupp = false
+        this.onecheck = false
+        this.grcheckbox = false
+      }
+    }
+    else {
+      this.btnSupp = true
+      toutcheck.forEach(element => {
+        element.checked = false
+      })
+    }
+  }
+
 }
+

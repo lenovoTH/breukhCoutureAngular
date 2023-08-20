@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-liste',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./liste.component.css']
 })
 export class ListeComponent {
+  constructor() { }
+
+  @Input() articles: any[] = []
 
 }
+

@@ -1,1 +1,34 @@
-<p>item works!</p>
+<!-- <p>item works!</p> -->
+
+<!-- <tr>
+    <td>
+        {{article.libelle}}
+    </td>
+    <td>
+        {{article.prix}}
+    </td>
+    <td>
+        {{article.stock}}
+    </td>
+    <td>
+        {{article.fournisseur.libelle}}
+    </td>
+    <td>
+        {{article.categorie.libelle}}
+    </td>
+    <td><button type="submit" class="btn btn-warning mt-4 ms-3">Edit</button></td>
+    <td><button type="submit" class="btn btn-danger mt-4 ms-3">supprimer</button></td>
+
+</tr> -->
+
+
+<tr class="d-flex justify-content-between ">
+    <td style="width: 150px;  text-align: center; padding: 0;">{{article.libelle}}</td>
+    <td style="margin-left: 115px;"> {{article.prix}} </td>
+    <td style="margin-left: 150px; text-align: center;">{{article.stock}} </td>
+    <td style="margin-left: 175px;">{{article.categorie.libelle}}</td>
+    <td style="margin-left: 110px; ">
+        <button type="submit" class="btn btn-warning" style="margin-right: 10px;">Edit</button>
+        <button type="submit" class="btn btn-danger" value="{{article.id}}">supprimer</button>
+    </td>
+</tr>

@@ -23,8 +23,9 @@
                     <div class="row mt-4">
                         <label for="" class="fw-bold d-inline col-3">Ajout</label>
                         <div class="form-check form-switch col-3">
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
-                                [checked]="btnswitch" value="ajout" (change)="testswitch($event)" />
+                            <input class="form-check-input" type="checkbox" role="switch" #target
+                                id="flexSwitchCheckDefault" [checked]="btnswitch" value="ajout"
+                                (change)="testswitch(target)" />
                         </div>
                         <label class="fw-bold d-inline col-3">Edit</label>
                     </div>
@@ -37,28 +38,28 @@
                     <h3 class="text-center text-primary fw-bold">Liste des categories</h3>
                 </div>
                 <div class="col-md-6">
-                    <button type="submit" class="btn btn-success mt-4 ms-3" (click)="suppression(tabCheckbox,$event)"
+                    <button type="submit" class="btn btn-success mt-4 ms-3" (click)="suppression()"
                         [disabled]="btnSupp">supprimer</button>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col fw-bold"><input type="checkbox" value="" [checked]="checkbox"
-                                    (click)="allCheck($event)"></th>
+                            <th scope="col fw-bold"><input type="checkbox" [checked]="tabCheckbox.length ==recupnbreEl().length"
+                                    [disabled]="!switch" (click)="allCheck($event)"></th>
                             <th scope="col fw-bold">Libelle</th>
                         </tr>
                     </thead>
                     <tbody *ngFor="let liste of donnees
-                    
                     | paginate :{
                         itemsPerPage: 5,
                         currentPage: pagination,
-                        totalItems: allPages
-                    }
+                        totalItems: allPages,
+                    };
                     ">
                         <tr>
-                            <th scope="row"><input type="checkbox" value="{{liste.id}}" [checked]="checkbox" #valcheck
-                                    class="toutcheck" (click)="recupCheck(valcheck)"></th>
+                            <th scope="row"><input type="checkbox" [value]="liste.id" #valcheck class="toutcheck"
+                                    [checked]="oneone" [disabled]="!switch"
+                                    (click)="recupCheck(valcheck.value, $event)"></th>
 
                             <input type="text" id="form7Example1" class="form-control" readonly name="inputListe"
                                 #valInput value="{{liste.libelle}}" (click)="recup(valInput, valcheck, myLibelle)"

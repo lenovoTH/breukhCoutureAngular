@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Categorie } from '../model/model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,8 @@ export class CategorieService {
     })
   };
 
-  getCategories(page: number) {
-    return this.http.get(this.url + '?page=' + page);
+  getCategories(page: number):Observable<Categorie[]> {
+    return this.http.get<Categorie[]>(this.url + '?page=' + page);
   }
   
   AllCategories() {
@@ -36,11 +37,18 @@ export class CategorieService {
   //   return this.http.get<boolean>(this.urlsearch + '?libelle=' + libelle)
   // }
 
-  updateCategorie(id: number, libelle: string) {
+  updateCategorie(id: string, libelle: string) {
     return this.http.put(this.url + '/' + id, { libelle: libelle });
   }
 
-  deleteCategorie(id: number[]) {
+  deleteCategorie(id: string) {
     return this.http.delete(this.url + '/' + id);
   }
+
+// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
+
+
+
+
 }

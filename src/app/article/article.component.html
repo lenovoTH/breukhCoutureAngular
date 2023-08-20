@@ -1,14 +1,16 @@
 <div class="container mt-5">
     <!-- Jumbotron -->
-    <div class="p-4 shadow-4 rounded-3" style="background-color: hsl(0, 0%, 94%);">
-        <h1>Article</h1>
-
-        <app-form></app-form>
-
+    <div class="p-4 shadow-4 rounded-3" style="background-color: hsl(205, 55%, 85%);">
+        <h1 class="">Article</h1>
+        <!-- <div class="card-header bg-success">
+            <h4 class="card-title text-white text-center fw-bold">BREUKH-COUTURE</h4>
+        </div> -->
+        <app-form [categories]="allcat" [fournisseurs]="allfourn" [articles]="allarticles"
+            (itemEvent)="recupDataEnfant($event)" (formDataArticle)="insertArticle($event)"> </app-form>
 
         <div class="mt-5">
-            <app-liste></app-liste>
+            <app-liste [articles]="allarticles"></app-liste>
         </div>
     </div>
     <!-- Jumbotron -->
-</div>
+    <!-- </div> -->

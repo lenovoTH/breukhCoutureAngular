@@ -1,14 +1,27 @@
 <table class="table align-middle mb-0 bg-white">
     <thead class="bg-light">
-        <tr>
+        <!-- <tr>
             <th>Article</th>
             <th>Prix</th>
             <th>Stock</th>
             <th>Catégorie</th>
             <th>Actions</th>
+        </tr> -->
+
+        <tr class="d-flex justify-content-between">
+            <th style="margin-left: 0px; width: 150px; text-align: center;">libelle</th>
+            <th style="margin-left: 100px; width: 150px;text-align: center;">prix</th>
+            <th style="margin-left: 100px;width: 150px; text-align: center;">stock</th>
+            <th style="margin-left: 100px;width: 150px; text-align: center;">categorie</th>
+            <th style="margin-left: 100px;width: 150px; text-align: center;">actions</th>
         </tr>
     </thead>
     <tbody>
 
+        <tr>
+            <app-item *ngFor="let article of articles" [article]="article"></app-item>
+
+        </tr>
     </tbody>
+
 </table>
