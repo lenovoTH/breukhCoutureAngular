@@ -34,7 +34,6 @@ export class CategorieComponent implements OnInit {
   inputLib: boolean = false
   valswitch2: boolean = false
   tablength!: number
-  tabrecup: any
   itemsPerPage: number = 5
 
   ngOnInit() {
