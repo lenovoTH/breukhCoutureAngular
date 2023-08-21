@@ -25,12 +25,12 @@ export class CategorieService {
     return this.http.get<DTO>(this.url + '?page=' + page);
   }
 
-  AllCategories() {
-    return this.http.get(this.urlAll);
+  AllCategories() :Observable<Categorie[]>{
+    return this.http.get<Categorie[]>(this.urlAll);
   }
 
-  addCategorie(libelle: string) {
-    return this.http.post(this.url, { libelle: libelle }, this.httpOptions);
+  addCategorie(libelle: string): Observable<Categorie>{
+    return this.http.post<Categorie>(this.url, { libelle: libelle }, this.httpOptions);
   }
 
   // searchCategorie(libelle: string): Observable<boolean> {

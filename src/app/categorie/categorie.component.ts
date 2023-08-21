@@ -58,7 +58,7 @@ export class CategorieComponent implements OnInit {
 
   toutesCategories() {
     this.service.AllCategories().subscribe({
-      next: (value: any) => {
+      next: (value: Categorie[]) => {
         // console.log(value);
         this.tabAll = value
       }
@@ -90,8 +90,7 @@ export class CategorieComponent implements OnInit {
 
   ajoutCategorie() {
     this.service.addCategorie(this.myForm.value.libelle).subscribe({
-      next: (value: any) => {
-        this.donnees = value
+      next: (value: Categorie) => {
         this.myForm.reset()
         this.btnok = true
         // this.btnSupp == false
