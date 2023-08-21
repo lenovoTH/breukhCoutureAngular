@@ -31,7 +31,7 @@ export class ArticleComponent {
     })
   }
 
-  insertArticle(event: FormData) {
+  insertArticle(event: any) {
     // const even = event.target as HTMLInputElement
     console.log(event);
     const formDataObject: any = {};
@@ -39,8 +39,9 @@ export class ArticleComponent {
       formDataObject[key] = value;
     });
     console.log(formDataObject);
-    this.articleservice.addArticle(event).subscribe((value) => {
+    this.articleservice.addArticle(formDataObject).subscribe((value) => {
       console.log(value);
+      this.fetchAllData()
     })
   }
 
@@ -48,7 +49,7 @@ export class ArticleComponent {
     // console.log(event)
     const catCompare: Fournisseur[] = []
     this.allarticles.forEach(element => {
-      if (element.categorie.id == +event) {
+      if (element.categorie.libelle == event) {
         catCompare.push(element)
       }
     });
@@ -63,7 +64,11 @@ export class ArticleComponent {
 
 
 
-
+supprimer(event:number){
+  this.articleservice.deleteArticle(event).subscribe(data=>{
+    this.fetchAllData()
+  })
+}
 
 
 

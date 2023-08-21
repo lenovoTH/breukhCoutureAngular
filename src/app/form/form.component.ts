@@ -25,6 +25,7 @@ export class FormComponent {
   fournSelectionner: Fournisseur[] = []
   fournSupprimer: Fournisseur[] = []
   tabArticles: Article[] = []
+  idFourn:number=0
 
   image: any = "assets/img/couture.jpg";
   isChanged: boolean = false;
@@ -53,13 +54,15 @@ export class FormComponent {
     const even = event.target as HTMLInputElement
     this.itemEvent.emit(even.value);
     this.articleservice.getValue().subscribe((value) => {
-      console.log(value);
       if (value.fournisseur != undefined) {
         let pos: number = Number(value.position)
         pos = pos + 1
         this.categorie = value.fournisseur.categorie.libelle + '-' + pos;
         this.myForm.addControl('reference', this.formbuilder.control(this.libelle + this.categorie))
         console.log(this.categorie);
+      }else{
+        this.categorie = even.value +'-' + 1;
+        this.myForm.addControl('reference', this.formbuilder.control(this.libelle + this.categorie))
       }
       // console.log(value);
     })
@@ -86,6 +89,7 @@ export class FormComponent {
   }
 
   selectFourn(fourn: Fournisseur) {
+    this.idFourn = fourn.id
     this.fournSelectionner.push(fourn)
     this.fournisseurs.forEach((element: Fournisseur, i) => {
       if (fourn.id == element.id) {
@@ -116,9 +120,9 @@ export class FormComponent {
     formData.append('prix', this.myForm.value.prix)
     formData.append('stock', this.myForm.value.stock)
     formData.append('categorie', this.myForm.value.categorie)
-    formData.append('fournisseur', this.myForm.value.fournisseur)
+    formData.append('fournisseur', this.idFourn.toString())
     formData.append('reference', this.myForm.value.reference)
-    formData.append('image', this.file)
+    formData.append('photo', this.file)
     this.formDataArticle.emit(formData);
     // const formDataObject: any = {};
     // formData.forEach((value, key) => {

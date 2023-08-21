@@ -14,6 +14,9 @@ export class ArticleService {
   private myBehaviorSubject = new BehaviorSubject<FournisseurSubject>(
     { 'fournisseur': { 'id': 0, 'libelle': "", 'categorie': { 'id': 0, 'libelle': "" } }, position: 0 });
 
+
+    private deleteBehaviour =  new BehaviorSubject<number>(0);
+
   urlA: string = "http://127.0.0.1:8000/api/"
   private url: string = "http://127.0.0.1:8000/api/alldata"
 
@@ -28,16 +31,16 @@ export class ArticleService {
     return this.http.get(this.url);
   }
 
-  addArticle(article: FormData) {
+  addArticle(article: Article) {
     return this.http.post(this.url, article, this.httpOptions);
   }
 
   updateArticle(id: string, libelle: string) {
-    return this.http.put(this.url + '/' + id, { libelle: libelle });
+    return this.http.put(this.urlA+"article" + '/' + id, { libelle: libelle });
   }
 
-  deleteArticle(id: string) {
-    return this.http.delete(this.url + '/' + id);
+  deleteArticle(id: number) {
+    return this.http.delete(this.urlA+"articles" + '/' + id);
   }
 
   setValue(value: FournisseurSubject) {
@@ -47,4 +50,15 @@ export class ArticleService {
   getValue() {
     return this.myBehaviorSubject.asObservable();
   }
+
+
+  setValueDelete(value: number) {
+    this.deleteBehaviour.next(value)
+  }
+
+  getValueDelete() {
+    return this.deleteBehaviour.asObservable();
+  }
+
+
 }

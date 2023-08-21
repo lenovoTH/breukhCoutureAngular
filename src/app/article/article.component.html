@@ -5,11 +5,10 @@
         <!-- <div class="card-header bg-success">
             <h4 class="card-title text-white text-center fw-bold">BREUKH-COUTURE</h4>
         </div> -->
-        <app-form [categories]="allcat" [fournisseurs]="allfourn" [articles]="allarticles"
-            (itemEvent)="recupDataEnfant($event)" (formDataArticle)="insertArticle($event)"> </app-form>
+        <app-form [categories]="allcat" [fournisseurs]="allfourn" [articles]="allarticles" (itemEvent)="recupDataEnfant($event)" (formDataArticle)="insertArticle($event)"> </app-form>
 
         <div class="mt-5">
-            <app-liste [articles]="allarticles"></app-liste>
+            <app-liste [articles]="allarticles" (itemEventDelete)="supprimer($event)"></app-liste>
         </div>
     </div>
     <!-- Jumbotron -->
