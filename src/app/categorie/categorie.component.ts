@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CategorieService } from '../services/categorie.service';
-import { Categorie } from '../model/model';
+import { Categorie, DTO } from '../model/model';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -39,7 +39,7 @@ export class CategorieComponent implements OnInit {
 
   ngOnInit() {
     this.myForm = this.formBuilder.group({
-      libelle: ['', [Validators.required, Validators.minLength(3)]]// 
+      libelle: ['', [Validators.required, Validators.minLength(3)]]//
     });
     this.fetchCategories()
     this.toutesCategories()
@@ -49,8 +49,8 @@ export class CategorieComponent implements OnInit {
   // ---------------------------------------------------------------------------------
 
   fetchCategories() {
-    this.service.getCategories(this.pagination).subscribe((categorie: any) => {
-      // console.log(categorie.data);
+    this.service.getCategories(this.pagination).subscribe((categorie: DTO) => {
+       console.log(categorie);
       this.donnees = categorie.data,
         this.allPages = categorie.total
     })

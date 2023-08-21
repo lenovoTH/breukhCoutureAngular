@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Categorie } from '../model/model';
+import { Categorie, DTO } from '../model/model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +21,10 @@ export class CategorieService {
     })
   };
 
-  getCategories(page: number):Observable<Categorie[]> {
-    return this.http.get<Categorie[]>(this.url + '?page=' + page);
+  getCategories(page: number):Observable<DTO> {
+    return this.http.get<DTO>(this.url + '?page=' + page);
   }
-  
+
   AllCategories() {
     return this.http.get(this.urlAll);
   }

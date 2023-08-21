@@ -26,3 +26,9 @@ export interface FournisseurSubject {
     fournisseur: Fournisseur,
     position: number
 }
+
+
+export interface DTO{
+  data: Categorie[],
+  total:number
+}
