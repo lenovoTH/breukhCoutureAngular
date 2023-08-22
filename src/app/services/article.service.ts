@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Article, Categorie, Fournisseur, FournisseurSubject } from '../model/model';
+import { AllData, Article, Categorie, Fournisseur, FournisseurSubject } from '../model/model';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 
@@ -14,11 +14,16 @@ export class ArticleService {
   private myBehaviorSubject = new BehaviorSubject<FournisseurSubject>(
     { 'fournisseur': { 'id': 0, 'libelle': "", 'categorie': { 'id': 0, 'libelle': "" } }, position: 0 });
 
+  // private deleteBehaviour = new BehaviorSubject<number>(0);
+  private modifBehaviour = new BehaviorSubject<Article>({
+    id: 0,
+    libelle: "", prix: 0, stock: 0,
+    categorie: { libelle: "", id: 0 },
+    fournisseur: { libelle: "", id: 0, categorie: { libelle: "", id: 0 } },
+    reference: "", photo: ""
+  });
 
-    private deleteBehaviour =  new BehaviorSubject<number>(0);
-
-  urlA: string = "http://127.0.0.1:8000/api/"
-  private url: string = "http://127.0.0.1:8000/api/alldata"
+  private url: string = "http://127.0.0.1:8000/api/"
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -27,20 +32,20 @@ export class ArticleService {
     })
   };
 
-  getAllData() {
-    return this.http.get(this.url);
+  getAllData(): Observable<AllData> {
+    return this.http.get<AllData>(this.url + 'alldata');
   }
 
-  addArticle(article: Article) {
-    return this.http.post(this.url, article, this.httpOptions);
+  addArticle(article: Article): Observable<Article> {
+    return this.http.post<Article>(this.url + 'alldata', article, this.httpOptions);
   }
 
-  updateArticle(id: string, libelle: string) {
-    return this.http.put(this.urlA+"article" + '/' + id, { libelle: libelle });
+  updateArticle(article: Article): Observable<Article> {
+    return this.http.post<Article>(this.url + "articles" + '/' + article.id, article);
   }
 
-  deleteArticle(id: number) {
-    return this.http.delete(this.urlA+"articles" + '/' + id);
+  deleteArticle(id: number): Observable<Article> {
+    return this.http.delete<Article>(this.url + "articles" + '/' + id);
   }
 
   setValue(value: FournisseurSubject) {
@@ -51,14 +56,24 @@ export class ArticleService {
     return this.myBehaviorSubject.asObservable();
   }
 
+  // setValueModif(value: Article) {
+  //   this.modifBehaviour.next(value)
+  // }
 
-  setValueDelete(value: number) {
-    this.deleteBehaviour.next(value)
-  }
+  // getValueModif() {
+  //   return this.modifBehaviour.asObservable();
+  // }
 
-  getValueDelete() {
-    return this.deleteBehaviour.asObservable();
-  }
 
+
+  // setValueDelete(value: number) {
+  //   this.deleteBehaviour.next(value)
+  // }
+
+  // getValueDelete() {
+  //   return this.deleteBehaviour.asObservable();
+  // }
+
+  
 
 }

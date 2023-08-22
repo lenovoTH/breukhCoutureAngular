@@ -7,13 +7,14 @@ export interface Categorie {
 }
 
 export interface Article {
-    libelle: string,
     id: number,
+    libelle: string,
     prix: number,
     stock: number,
     fournisseur: Fournisseur,
     categorie: Categorie,
-    reference: string
+    reference: string,
+    photo:string
 }
 
 export interface Fournisseur {
@@ -27,8 +28,13 @@ export interface FournisseurSubject {
     position: number
 }
 
+export interface DTO {
+    data: Categorie[],
+    total: number
+}
 
-export interface DTO{
-  data: Categorie[],
-  total:number
+export interface AllData {
+    articles: Article[],
+    fournisseurs: Fournisseur[]
+    categories: Categorie[],
 }

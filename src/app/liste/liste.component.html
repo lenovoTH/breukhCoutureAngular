@@ -17,11 +17,9 @@
         </tr>
     </thead>
     <tbody>
-
         <tr>
-            <app-item *ngFor="let article of articles" [article]="article" (itemEvent)="deleteItem($event)"></app-item>
-
+            <app-item *ngFor="let article of articles" [article]="article" (itemEvent)="deleteItem($event)"
+                (iEvent)="modifItem($event)"></app-item>
         </tr>
     </tbody>
-
 </table>

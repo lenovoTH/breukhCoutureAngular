@@ -9,18 +9,21 @@ import { ArticleService } from '../services/article.service';
 })
 export class ListeComponent {
 
-  constructor(private articleService:ArticleService) { }
+  constructor(private articleService: ArticleService) { }
 
   @Input() articles: any[] = []
   @Output() itemEventDelete = new EventEmitter<number>();
+  @Output() itemEventModif = new EventEmitter<Article>();
 
 
-
-  deleteItem(id: number){
+  deleteItem(id: number) {
     this.itemEventDelete.emit(id);
-
   }
 
-
+  modifItem(article:Article) {
+    this.itemEventModif.emit(article);
+    console.log(article);
+  }
+  
 }
 

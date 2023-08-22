@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ArticleService } from '../services/article.service';
-import { Observable } from 'rxjs';
+// import { Observable } from 'rxjs';
 import { Article, Categorie, Fournisseur } from '../model/model';
 
 // import { Observable, from, partition } from 'rxjs';
@@ -11,7 +11,7 @@ import { Article, Categorie, Fournisseur } from '../model/model';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
 })
-export class FormComponent {
+export class FormComponent implements OnChanges {
   constructor(private formbuilder: FormBuilder,
     private articleservice: ArticleService) { }
 
@@ -25,7 +25,7 @@ export class FormComponent {
   fournSelectionner: Fournisseur[] = []
   fournSupprimer: Fournisseur[] = []
   tabArticles: Article[] = []
-  idFourn:number=0
+  idFourn: number = 0
 
   image: any = "assets/img/couture.jpg";
   isChanged: boolean = false;
@@ -34,19 +34,40 @@ export class FormComponent {
   @Input() categories: Categorie[] = []
   @Input() fournisseurs: Fournisseur[] = []
   @Input() articles: Article[] = []
+  @Input() articlemodif!: Article
   // @Output() article = new EventEmitter<any>();
-  @Output() itemEvent = new EventEmitter<string>();
-  @Output() formDataArticle: EventEmitter<FormData> = new EventEmitter<FormData>();
 
-  ngOnInit() {
+  @Output() itemEvent: EventEmitter<string> = new EventEmitter<string>();
+  @Output() formDataArticle: EventEmitter<FormData> = new EventEmitter<FormData>();
+  @Output() articleModifier: EventEmitter<Article> = new EventEmitter<Article>();
+
+  ngOnChanges() {
     this.libelle = this.ref
+    let formvide: Article = {
+      id: 0,
+      libelle: "", prix: 0, stock: 0,
+      categorie: { libelle: "", id: 0 },
+      fournisseur: { libelle: "", id: 0, categorie: { libelle: "", id: 0 } },
+      reference: "", photo: ""
+    }
+    // console.log(this.articlemodif);
+    if (this.articlemodif == null) {
+      this.createForm(formvide)
+    }
+    else {
+      this.createForm(this.articlemodif)
+    }
+  }
+
+  createForm(article: Article) {
     this.myForm = this.formbuilder.group({
-      libelle: ['', Validators.required],
-      prix: ['', Validators.required],
-      stock: ['', Validators.required],
-      categorie: ['', Validators.required],
-      fournisseur: ['', Validators.required],
-      photo: ['',Validators.required],
+      libelle: [article.libelle, Validators.required],
+      prix: [article.prix, Validators.required],
+      stock: [article.stock, Validators.required],
+      categorie: [article.categorie.libelle, Validators.required],
+      fournisseur: [article.fournisseur.libelle, Validators.required],
+      reference: [article.reference, Validators.required],
+      photo: ['', Validators.required],
     })
   }
 
@@ -60,8 +81,8 @@ export class FormComponent {
         this.categorie = value.fournisseur.categorie.libelle + '-' + pos;
         this.myForm.addControl('reference', this.formbuilder.control(this.libelle + this.categorie))
         console.log(this.categorie);
-      }else{
-        this.categorie = even.value +'-' + 1;
+      } else {
+        this.categorie = even.value + '-' + 1;
         this.myForm.addControl('reference', this.formbuilder.control(this.libelle + this.categorie))
       }
       // console.log(value);
@@ -141,5 +162,8 @@ export class FormComponent {
       this.image = (<FileReader>event.target).result;
     }
   }
+
+
 }
+
 

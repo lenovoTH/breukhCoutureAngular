@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ArticleService } from '../services/article.service';
-import { Article, Categorie, Fournisseur, FournisseurSubject } from '../model/model';
+import { AllData, Article, Categorie, Fournisseur, FournisseurSubject } from '../model/model';
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
@@ -11,10 +11,11 @@ export class ArticleComponent {
   allcat: Categorie[] = []
   allfourn: Fournisseur[] = []
   allarticles: Article[] = []
+  modif!: Article
   alldata: any[] = []
   article!: Article
 
-  lastElement: any
+  // lastElement: any
   constructor(private articleservice: ArticleService) { }
 
   ngOnInit() {
@@ -22,12 +23,11 @@ export class ArticleComponent {
   }
 
   fetchAllData() {
-    this.articleservice.getAllData().subscribe({
-      next: (value: any) => {
-        this.allarticles = value.articles;
-        this.allcat = value.categories;
-        this.allfourn = value.fournisseurs;
-      }
+    this.articleservice.getAllData().subscribe((value: AllData) => {
+      // console.log(value);
+      this.allarticles = value.articles;
+      this.allcat = value.categories;
+      this.allfourn = value.fournisseurs;
     })
   }
 
@@ -40,10 +40,32 @@ export class ArticleComponent {
     });
     console.log(formDataObject);
     this.articleservice.addArticle(formDataObject).subscribe((value) => {
-      console.log(value);
+      console.log(value)
       this.fetchAllData()
     })
   }
+
+  articleForm(event: Article) {
+    this.modif = event
+    console.log(this.modif);
+  }
+
+  // modifArticle(event: Article) {
+  //   console.log(event);
+  //   this.modif = event
+  //   this.articleservice.updateArticle(event).subscribe((value: Article) => {
+  //     console.log(value);
+  //   })
+  // }
+
+  // modifArticle(event: Article) {
+  //   console.log(event);
+  //   // this.modif = event
+  //   // this.articleservice.updateArticle(event).subscribe((value: Article) => {
+  //   //   console.log(value);
+  //   // })
+  //   // this.articleservice.setValueModif(event)
+  // }
 
   recupDataEnfant(event: string) {
     // console.log(event)
@@ -57,53 +79,10 @@ export class ArticleComponent {
     this.articleservice.setValue({ fournisseur: catCompare[catCompare.length - 1], position: catCompare.length })
   }
 
-
-
-
-
-
-
-
-supprimer(event:number){
-  this.articleservice.deleteArticle(event).subscribe(data=>{
-    this.fetchAllData()
-  })
-}
-
-
-
-
-
-
-
-
-  // fetchCategories() {
-  //   this.categorieservice.AllCategories().subscribe({
-  //     next: (value: any) => {
-  //       this.allcat = value
-  //     }
-  //   })
-  // }
-
-  // fetchFournisseurs() {
-  //   this.fournisseurservice.getFournisseurs().subscribe({
-  //     next: (value: any) => {
-  //       // console.log(value);
-  //       this.allfourn = value
-  //     }
-  //   })
-  // }
-
-  // fetchArticles() {
-  //   this.articleservice.getArticles().subscribe({
-  //     next: (value: any) => {
-  //       console.log(value.data);
-  //       this.allarticles = value.data
-  //       this.lastElement = this.allarticles[this.allarticles.length - 1]
-  //     }
-  //   })
-  // }
-
-
+  supprimer(event: number) {
+    this.articleservice.deleteArticle(event).subscribe(data => {
+      this.fetchAllData()
+    })
+  }
 
 }

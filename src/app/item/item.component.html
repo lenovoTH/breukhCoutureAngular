@@ -28,7 +28,7 @@
     <td style="margin-left: 150px; text-align: center;">{{article.stock}} </td>
     <td style="margin-left: 175px;">{{article.categorie.libelle}}</td>
     <td style="margin-left: 110px; ">
-        <button type="submit" class="btn btn-warning" style="margin-right: 10px;">Edit</button>
+        <button type="submit" class="btn btn-warning" (click)="modifItem(article)" style="margin-right: 10px;">Edit</button>
         <button type="submit" class="btn btn-danger" (click)="deleteItem(article.id)">supprimer</button>
     </td>
 </tr>

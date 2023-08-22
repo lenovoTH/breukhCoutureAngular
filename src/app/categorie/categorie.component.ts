@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CategorieService } from '../services/categorie.service';
 import { Categorie, DTO } from '../model/model';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-categorie',
