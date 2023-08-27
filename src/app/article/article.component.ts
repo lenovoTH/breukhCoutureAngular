@@ -31,40 +31,48 @@ export class ArticleComponent {
     })
   }
 
+  articleForm(event: Article) {
+    this.modif = event
+    // console.log(this.modif);
+  }
+
   insertArticle(event: any) {
-    // const even = event.target as HTMLInputElement
-    console.log(event);
     const formDataObject: any = {};
     event.forEach((value: any, key: any) => {
       formDataObject[key] = value;
     });
     console.log(formDataObject);
-    this.articleservice.addArticle(formDataObject).subscribe((value) => {
-      console.log(value)
-      this.fetchAllData()
-    })
+    if (event != null) {
+      this.articleservice.updateArticle(formDataObject).subscribe((value: Article) => {
+        console.log(value);
+      })
+    } else {
+      this.articleservice.addArticle(formDataObject).subscribe((value) => {
+        console.log(value)
+        this.fetchAllData()
+      })
+    }
   }
 
-  articleForm(event: Article) {
-    this.modif = event
-    console.log(this.modif);
-  }
-
-  // modifArticle(event: Article) {
+  // insertArticle(event: any) {
+  //   // const even = event.target as HTMLInputElement
   //   console.log(event);
-  //   this.modif = event
-  //   this.articleservice.updateArticle(event).subscribe((value: Article) => {
-  //     console.log(value);
+  //   const formDataObject: any = {};
+  //   event.forEach((value: any, key: any) => {
+  //     formDataObject[key] = value;
+  //   });
+  //   console.log(formDataObject);
+  //   this.articleservice.addArticle(formDataObject).subscribe((value) => {
+  //     console.log(value)
+  //     this.fetchAllData()
   //   })
   // }
 
-  // modifArticle(event: Article) {
+  // modifArticle(event: any) {
   //   console.log(event);
-  //   // this.modif = event
-  //   // this.articleservice.updateArticle(event).subscribe((value: Article) => {
-  //   //   console.log(value);
-  //   // })
-  //   // this.articleservice.setValueModif(event)
+  //   this.articleservice.updateArticle(event).subscribe((value: Article) => {
+  //     console.log(value);
+  //   })
   // }
 
   recupDataEnfant(event: string) {

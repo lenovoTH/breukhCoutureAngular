@@ -11,8 +11,10 @@ import { ListeComponent } from './liste/liste.component';
 import { ItemComponent } from './item/item.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
+import { Form2Component } from './form2/form2.component';
+import { Article2Component } from './article2/article2.component';
+import { Item2Component } from './item2/item2.component';
+import { Liste2Component } from './liste2/liste2.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormComponent,
     ListeComponent,
     ItemComponent,
-    PaginationComponent
+    PaginationComponent,
+    Form2Component,
+    Article2Component,
+    Item2Component,
+    Liste2Component
   ],
   imports: [
     BrowserModule,

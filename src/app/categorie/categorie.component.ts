@@ -48,7 +48,7 @@ export class CategorieComponent implements OnInit {
 
   fetchCategories() {
     this.service.getCategories(this.pagination).subscribe((categorie: DTO) => {
-       console.log(categorie);
+      console.log(categorie);
       this.donnees = categorie.data,
         this.allPages = categorie.total
     })

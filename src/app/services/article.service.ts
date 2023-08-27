@@ -12,14 +12,14 @@ export class ArticleService {
   constructor(private http: HttpClient) { }
 
   private myBehaviorSubject = new BehaviorSubject<FournisseurSubject>(
-    { 'fournisseur': { 'id': 0, 'libelle': "", 'categorie': { 'id': 0, 'libelle': "" } }, position: 0 });
+    { 'fournisseur': { 'id': 0, 'libelle': "", 'categorie': { 'id': 0, 'libelle': "",'type':"" } }, position: 0 });
 
   // private deleteBehaviour = new BehaviorSubject<number>(0);
   private modifBehaviour = new BehaviorSubject<Article>({
     id: 0,
     libelle: "", prix: 0, stock: 0,
-    categorie: { libelle: "", id: 0 },
-    fournisseur: { libelle: "", id: 0, categorie: { libelle: "", id: 0 } },
+    categorie: { libelle: "", id: 0, type:"" },
+    fournisseur: { libelle: "", id: 0, categorie: { libelle: "", id: 0, type:"" } },
     reference: "", photo: ""
   });
 

@@ -1,0 +1,28 @@
+<!-- <p>liste2 works!</p> -->
+
+<table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+        <tr>
+            <th>libelle</th>
+            <th>stock</th>
+            <th>Articles de confection</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody class="card-body">
+        <tr *ngFor="let articleV of articlesV |paginate:{itemsPerPage: 2, currentPage: currentPage}">
+            <td>{{articleV.libelle}}</td>
+            <td>{{articleV.quantiteStock}}</td>
+            <td>
+                <div *ngFor="let artconf of articleV.articleConfection">
+                    <span>{{artconf.libelle}}</span>
+                </div>
+            </td>
+            <td>
+                <button type="submit" class="btn btn-warning" style="margin-right: 10px;">Edit</button>
+                <button type="submit" class="btn btn-danger">supprimer</button>
+            </td>
+        </tr>
+    </tbody>
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+</table>

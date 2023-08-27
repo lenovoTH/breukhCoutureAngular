@@ -70,11 +70,12 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col">
                 <div class="">
                     <label class="form-label" for="typeEmail">Référence</label>
-                    <input type="text" value="{{libelle+'-'+categorie.toUpperCase()}}" id="typeEmail"
-                        class="form-control input-custom" formControlName="reference" readonly />
+                    <input type="text" value="{{libelle +'-'+categorie.toUpperCase()}}" id="typeEmail"
+                        class="form-control input-custom" readonly #ref/>
                 </div>
             </div>
         </div>

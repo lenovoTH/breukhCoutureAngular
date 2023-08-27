@@ -15,14 +15,13 @@ export class ListeComponent {
   @Output() itemEventDelete = new EventEmitter<number>();
   @Output() itemEventModif = new EventEmitter<Article>();
 
-
   deleteItem(id: number) {
     this.itemEventDelete.emit(id);
   }
 
   modifItem(article:Article) {
     this.itemEventModif.emit(article);
-    console.log(article);
+    // console.log(article);
   }
   
 }

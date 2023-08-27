@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, Output, ViewChild, ElementRef, EventEmitter, OnChanges } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ArticleService } from '../services/article.service';
 // import { Observable } from 'rxjs';
 import { Article, Categorie, Fournisseur } from '../model/model';
@@ -35,26 +35,29 @@ export class FormComponent implements OnChanges {
   @Input() fournisseurs: Fournisseur[] = []
   @Input() articles: Article[] = []
   @Input() articlemodif!: Article
-  // @Output() article = new EventEmitter<any>();
 
   @Output() itemEvent: EventEmitter<string> = new EventEmitter<string>();
   @Output() formDataArticle: EventEmitter<FormData> = new EventEmitter<FormData>();
   @Output() articleModifier: EventEmitter<Article> = new EventEmitter<Article>();
+
+  @ViewChild('ref') refElement!: ElementRef;
 
   ngOnChanges() {
     this.libelle = this.ref
     let formvide: Article = {
       id: 0,
       libelle: "", prix: 0, stock: 0,
-      categorie: { libelle: "", id: 0 },
-      fournisseur: { libelle: "", id: 0, categorie: { libelle: "", id: 0 } },
-      reference: "", photo: ""
+      categorie: { libelle: "", id: 0, type:"" },
+      fournisseur: { libelle: "", id: 0, categorie: { libelle: "", id: 0, type:"" } },
+      reference: "",
+      photo: ""
     }
-    // console.log(this.articlemodif);
+
     if (this.articlemodif == null) {
       this.createForm(formvide)
     }
     else {
+      this.refElement.nativeElement.value = this.articlemodif.reference
       this.createForm(this.articlemodif)
     }
   }
@@ -66,7 +69,7 @@ export class FormComponent implements OnChanges {
       stock: [article.stock, Validators.required],
       categorie: [article.categorie.libelle, Validators.required],
       fournisseur: [article.fournisseur.libelle, Validators.required],
-      reference: [article.reference, Validators.required],
+      reference: ["", Validators.required],
       photo: ['', Validators.required],
     })
   }
@@ -80,7 +83,7 @@ export class FormComponent implements OnChanges {
         pos = pos + 1
         this.categorie = value.fournisseur.categorie.libelle + '-' + pos;
         this.myForm.addControl('reference', this.formbuilder.control(this.libelle + this.categorie))
-        console.log(this.categorie);
+        // console.log(this.categorie);
       } else {
         this.categorie = even.value + '-' + 1;
         this.myForm.addControl('reference', this.formbuilder.control(this.libelle + this.categorie))
@@ -92,7 +95,7 @@ export class FormComponent implements OnChanges {
   reference(lib: any) {
     this.libelle = this.ref + lib.value.substring(0, 3).toUpperCase()
       + '-' + this.categorie.toUpperCase()
-    console.log(this.articles);
+    // console.log(this.articles);
     // console.log(cat);
   }
 
@@ -135,23 +138,23 @@ export class FormComponent implements OnChanges {
   }
 
   submitForm() {
-    // console.log(this.myForm.value);
+    console.log(this.articlemodif);
     const formData = new FormData
     formData.append('libelle', this.myForm.value.libelle)
     formData.append('prix', this.myForm.value.prix)
     formData.append('stock', this.myForm.value.stock)
     formData.append('categorie', this.myForm.value.categorie)
     formData.append('fournisseur', this.idFourn.toString())
-    formData.append('reference', this.myForm.value.reference)
     formData.append('photo', this.file)
+    if (this.articlemodif == null) {
+      formData.append('reference', this.myForm.value.reference)
+    } else {
+      console.log(this.refElement.nativeElement.value);
+      console.log(this.myForm.value);
+      formData.append('reference', this.refElement.nativeElement.value)
+      formData.append('id', this.articlemodif.id.toString())
+    }
     this.formDataArticle.emit(formData);
-    // const formDataObject: any = {};
-    // formData.forEach((value, key) => {
-    //   formDataObject[key] = value;
-    // });
-    // console.log(formDataObject);
-    // console.log(formData);
-    // console.log(formData);
   }
 
   addImg(event: any) {
@@ -163,7 +166,4 @@ export class FormComponent implements OnChanges {
     }
   }
 
-
 }
-
-

@@ -1,0 +1,12 @@
+<div class="container mt-5">
+    <div class="card" style="background-color: hsl(205, 55%, 85%);">
+        <!-- <div class="card-header bg-success">
+            <h4 class="card-title text-white text-center fw-bold">BREUKH-COUTURE</h4>
+        </div> -->
+        <app-form2 (insertEvent)="addArticles($event)" [categories]="categories"> </app-form2>
+        <div class="card-header">
+            <app-liste2 [articlesV]="articlesVente"></app-liste2>
+        </div>
+    </div>
+
+</div>
